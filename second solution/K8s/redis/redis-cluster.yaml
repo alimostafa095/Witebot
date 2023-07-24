@@ -1,0 +1,49 @@
+# https://github.com/bitnami/charts/blob/main/bitnami/redis-cluster
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: redis-cluster-bitnami
+  namespace: widebot-redis-ns
+spec:
+  releaseName: redis
+  chart:
+    spec:
+      chart: redis-cluster
+      sourceRef:
+        kind: HelmRepository
+        name: bitnami
+      version: "8.3.4"
+  interval: 1m
+  values:
+
+    ################################
+    ## Use password authentication
+    usePassword: true
+    ## Name of existing secret object (for password authentication)
+    existingSecret: "redis-cluster-password"
+    ## Name of key containing password to be retrieved from the existing secret
+    existingSecretPasswordKey: "redis-password"
+
+
+    ################################
+    ## Cluster settings
+    cluster:
+      init: true
+      ## This is total number of nodes including the replicas. Meaning there will be 3 master and 3 replica
+      ## nodes (as replica count is set to 1 by default, there will be 1 replica per master node).
+      ## Hence, nodes = numberOfMasterNodes + numberOfMasterNodes * replicas
+      ##
+      ## The number of master nodes should always be >= 3, otherwise cluster creation will fail
+      ##
+      nodes: 1
+      ## Number of replicas for every master in the cluster
+      ## Parameter to be passed as --cluster-replicas to the redis-cli --cluster create
+      ## 1 means that we want a replica for every master created
+      ##
+      replicas: 2
+
+
+   
+
+
+

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: widebot-ns
+  name: widebot-app
+spec:
+  selector:
+    matchLabels:
+      app: widebot-app
+  replicas: 4
+  template:
+    metadata:
+      labels:
+        app: widebot-app
+    spec:
+      containers:
+      - name: widebot-app
+        image: alimostafa95/widebot:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+
